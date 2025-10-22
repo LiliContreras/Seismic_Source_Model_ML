@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadatos -->
+    <meta charset="utf-8">
+    <meta name="author" content="Lilibeth Contreras">
+    <meta name="description" content="Machine learning seismogenic zones">
+    <meta name="keywords" content="MachineLearning, HDBSCAN, Seismology, SeismogenicZones">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Titulo -->
+    <title>Definition of Seismogenic Zones by Applying Machine Learning to Improve Seismic Hazard Estimations in Mexico</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="imagenes/iingen_logo.png">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <!-- CSS -->
+    <link href="style.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300&family=Cinzel:wght@500&family=Indie+Flower&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Barra de navegacion -->
+    <nav class="navbar navbar-expand-md navbar-light">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-toggler">
+          <a class="navbar-brand" href="#">
+            <img src="imagenes/iingen.png" width="120" alt="Instituto de Ingeniería">
+          </a>
+          <ul class="navbar-nav d-flex justify-content-center align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#introduction">Introduction</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#background">Background</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#HDBSCAN">HDBSCAN</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#parameters">Application</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#results">Results</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#application">Application</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!--Section Hero-->
+    <section class="main-hero py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Columna 1: Título -->
+          <div class="col-md-6 text-center text-md-start">
+            <h1 class="jumbo">
+              Definition of Seismogenic Zones by Applying Machine Learning to Improve Seismic Hazard Estimations in Mexico
+            </h1>
+            <h2 class="text-secondary mb-4" id="typewriter"></h2>
+          </div>
+    
+          <!-- Columna 2: Video -->
+          <div class="col-md-6 text-center">
+            <video class="img-fluid rounded" autoplay muted loop controls>
+              <source src="videos/Zonas_New.mp4" type="video/mp4">
+              <source src="videos/lili.webm" type="video/webm">
+              Ups! your browser doesn't support videos.
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--
+    <section class="main-hero align-items-stretch">
+      <div class="contenedor-hero">
+        <div class="grid-hero">
+          <div> 
+            <h1 class="jumbo"> 
+              Machine Learning-based Seismogenic Zones for Seismic Hazard Estimation in Mexico
+            </h1>
+          </div>
+          <div class="java-hero">
+            <h2 class="text-secondary mb-4" id="typewriter"></h2>
+          </div>
+        </div>
+        <div class="hero-principal">
+          <video class="hero-imagen-desarrollador" autoplay muted loop controls>
+            <source src="videos/Zonas_propuestas.mp4" type="video/mp4">
+            <source src="videos/lili.webm" type="video/webm">
+            Ups! your browser doesn't support videos.
+          </video>
+        </div>
+      </div>
+    </section>
+  -->
+
+    <!-- ABout the project -->
+    <!-- 
+    <section id="introduction" class="sobre-mi seccion-oscura">
+      <div class="contenedor">
+        <h2 class="seccion-titulo">About the project</h2>
+        <p class="seccion-texto">
+          We explore a new approach for defining seismic zones intended to be the base of probabilistic seismic hazard calculations in Mexico. 
+          In order to reduce uncertainty in the PSH assessment, we evaluate the commonly used seismic zones in Mexico against the country's tectonic activity. 
+          We conclude that several discrepancies are observed, and a new approach is proposed to apply a machine learning algorithm designed to build seismic zones aligned 
+          with tectonic activity and geologic characteristics. To achieve the latter, we compiled focal mechanism data from an extended catalog by Franco et al. (2020), 
+          gravimetric data, and other geological features. The clustering algorithm HDBSCAN was selected for its suitability in handling the data distribution and density, 
+          providing optimal results for the task. Furthermore, we analyze b-values along a territorial grid to characterize seismicity and modify, evaluate, and validate the proposed zones. 
+          The results reveal a distribution of seismic zones that reflect the tectonic activity in Mexico, which brings more certainty to the seismic hazard estimations and opens a new direction in the definition of seismic zones.
+        </p>
+      </div>
+    </section>
+    -->
+    <section id="introduction" class="seccion-oscura">
+      <div class="container">
+        <h2 class="text-center mb-4">About the project</h2>
+        <p class="lead text-justify">
+          We explore a new approach for defining a seismic source model intended to be the base of probabilistic seismic hazard calculations in Mexico. 
+          The objective is to apply machine learning to characterize the available dataset, with that purpose, we evaluate different clustering algorithms and data scaling strategies for classifying a moment tensor catalog. 
+          We conclude that the best configuration of clusters was achieved using HDBSCAN, allowing to build zones without an invasive intervention from the user, adding objectiveness to the results. 
+          Besides the successfull application of the algorithm, the results reveal that the model also reflect the tectonic scheme of Mexico.
+          Additionally, a Probabilistic Seismic Hazard Assesment was performed to compare against seismic hazard estimations using the conventional seismic source model, 
+          the result show clear differences, but remain consistent according to the employed information.
+        </p>
+      </div>
+    </section>
+
+    <!-- Experiencia -->
+<section id="background" class="experiencia seccion-clara">
+  <div class="container text-center">
+    <div class="row">
+      <!-- Desarrollo Web -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">Background</p>
+        <p>
+          Since the application of Seismic Hazard in Mexico, there were applied different parameters to define seismogenic zones
+          that represent the country's tectonic activity. The current seismogenic zones used for PSH estimations consists of 47 seismic zones
+          classified mainly by magnitude and depth. However, there are other proposals that use similar input parameters to establish their zones,
+          none of the consulted works mentioned a specific procedure for defining their seismic source models, bringing concern and the idea to define a 
+          method for obtaining reproducible and representative models.    
+        </p>
+        <div class="badges-contenedor">
+          <div class="d-inline-block">
+            <a href="https://aplicaciones.iingen.unam.mx/ConsultasSPII/DetallePublicacion.aspx?id=152">
+              <button type="button" class="btn btn-secondary">
+                Esteva
+              </button>
+            </a>
+          </div>
+          <div class="d-inline-block">
+            <a href="https://link.springer.com/article/10.1007/s10950-017-9666-0">
+              <button type="button" class="btn btn-secondary">
+                Zuñiga
+              </button>
+            </a>
+          </div>
+        </div>
+        <!-- Imagen agregada -->
+        <img src="imagenes/mapa_CMT_CFEModel.png" alt="CFE seismogenic zones" class="img-fluid mt-3">
+      </div>
+
+      <!-- Articulos -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">Machine Learning</p>
+        <p>
+          The approach involved analyzing different clustering algorithms and data scaling strategies
+          to find the optimal fit for the employed dataset. Among the tested algorithms were: K-means, DBSCAN, HDBSCAN and BIRCH.
+          The best configuration was achieved using HDBSCAN, allowing less user intervention and better classification. The clustering methodology was also 
+          tested using Cesca's (2013) moment tensor metric, giving results consistent with those obtained from standard scaling and euclidean metrics.
+
+        </p>
+        <div class="badges-contenedor">
+          <div class="d-inline-block">
+            <a href="http://revistagi.geofisica.unam.mx/resources/epub/59n2-117/">
+              <button type="button" class="btn btn-secondary">
+                Google Colab
+              </button>
+            </a>
+          </div>
+        </div>
+        <!-- Imagen agregada -->
+        <img src="imagenes/Clustering_Algorithm.png" alt="Clustering algorithms test" class="img-fluid mt-3">
+      </div>
+
+      <!-- Estudiante -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">HDBSCAN application</p>
+        <p>
+          The selected input parameters consisted in a Moment tensor catalog (Franco, 2020), the Servicio Sismológico Nacional earthquake catalog
+          and gravity aceleration values along the mexican territory.   
+        </p>
+        <div class="badges-contenedor">
+          <div class="d-inline-block">
+            <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.HDBSCAN.html">
+              <button type="button" class="btn btn-secondary">
+                HDBSCAN
+              </button>
+            </a>
+          </div>
+        <!-- Imagen agregada -->
+        <img src="imagenes/PCA_HDBSCAN.png" alt="HDBSCAN application from HDBSCAN tutorial" class="img-fluid mt-3">
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Proyectos -->
+    <section id="HDBSCAN" class="proyectos-recientes seccion-clara d-flex flex-column">
+      <h2 class="seccion-titulo texto-negro">HDBSCAN algorithm</h2>
+      <h3 class="seccion-descripcion">This is a simplified version of the application of HDBSCAN...</h3>
+      <!-- Galeria de Proyectos -->
+      <div class="container text-center proyectos-contenedor">
+        <div class="row">
+          <!-- Proyecto 1 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="proyecto">
+              <img src="imagenes/Points_distribution.png" alt="Points distribution">
+              <div class="overlay">
+                <p>Points distribution</p>
+                <div class="iconos-contenedor">
+                  <p1>This image shows the parameters considered for the simplified application of HDBSCAN  </p1>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Proyecto 2 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="proyecto">
+              <img src="imagenes/Cluster_hierarchy.png" alt="Cluster hierarchy">
+              <div class="overlay">
+                <p>Cluster hierarchy</p>
+                <div class="iconos-contenedor">
+                  <p1>Shows the distance distribution between data before creating clusters</p1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Proyecto 3 -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="proyecto">
+              <img src="imagenes/Cluster_tree.png" alt="Cluster tree">
+              <div class="overlay">
+                <p>Condense cluster tree</p>
+                <div class="iconos-contenedor">
+                  <p1>Create a smaller tree considering the minimum cluster size to finally select clusters with largest total area</p1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="https://github.com/LiliContreras/Machine_Learning_Seismogenic_Zones_PSHA" target="_blank" rel="noopener noreferrer">
+        <button type="button" class="btn btn-secondary">
+          Watch the full code here!
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+      </a>
+    </section>
+
+    <!-- Investigaciones -->
+    <section id="parameters" class="testimonios seccion-clara">
+      <h2 class="seccion-titulo">Application</h2>
+      <h3 class="seccion-descripcion">This section shows the procedure of application of the algorithm ...</h3>
+      
+      <!-- Carrusel -->
+      <div id="testimonios-carrusel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <!--
+          <div class="carousel-item active">
+            <div class="container">
+              <img class="testimonio-imagen rounded" src="imagenes/Copia de Poster_Hor.png" alt="b values and Vs30 map">
+              <p class="testimonio-texto">For each focal mechanism, additional values were added in order to obtain a better fit of the results. Zero activity zones, were obteined with remaining data.</p>
+              <div class="testimonio-info">
+                <p class="cliente">Data were completed with b values, VS30, gravity, tectonostratigraphic terrains</p>
+                <p class="cargo">Data completeness before applying algorithm</p>
+              </div>
+            </div>
+          </div>-->
+          <div class="carousel-item active">
+            <div class="container">
+              <!-- Fila para las dos imágenes -->
+              <div class="row">
+                <!-- Primera imagen -->
+                <div class="col-md-6">
+                  <img class="testimonio-imagen rounded img-fluid" src="imagenes/bvalues_grid.png" alt="b values and Vs30 map">
+                </div>
+                <!-- Segunda imagen -->
+                <div class="col-md-6">
+                  <img class="testimonio-imagen rounded img-fluid" src="imagenes/mapa_parametros_grav_terrain.png" alt="gravity and terrain map">
+                </div>
+              </div>
+          
+              <!-- Fila para el texto -->
+              <div class="row mt-3"> <!-- mt-3 agrega un margen superior -->
+                <div class="col-12 text-center" >
+                  <p class="testimonio-texto mx-auto">1° For each focal mechanism, additional values were added in order to obtain a better fit of the results. Empty data zones were later completed with 4 Zuñiga zones.</p>
+                  <div class="testimonio-info">
+                    <p class="cliente">Data were completed with b-values and gravity aceleration distribution along Mexico</p>
+                    <p class="cargo">Data completeness before applying algorithm</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container">
+              <img class="testimonio-imagen rounded" src="imagenes/Zones_definition.png" alt="Clusters geometry definition">
+              <p class="testimonio-texto">2° The obtained clusters were used to built polygons by defining a grid and extension by depth.</p>
+              <div class="testimonio-info">
+                <p class="cliente">Construction of seismogenic zones</p>
+                <p class="cargo">Polygon definition</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Last</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Investigaciones -->
+    <section id="results" class="testimonios seccion-clara">
+      <h2 class="seccion-titulo">Results</h2>
+      <h3 class="seccion-descripcion">This section shows the results and seismogenic zones obtained ...</h3>
+      
+      <!-- Carrusel -->
+      <div id="testimonios-carrusel2" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="container">
+              <video class="testimonio-imagen" autoplay muted loop controls>
+                <source src="videos/Zonas_New.mp4" type="video/mp4">
+                <source src="videos/lili.webm" type="video/webm">
+                Ups! your browser doesn't support videos.
+              </video>
+              <p class="testimonio-texto">This clusters were build using location, strike, dip, rake, depth, b-values and gravity values as parameters for HDBSCAN algorithm.</p>
+              <div class="testimonio-info">
+                <p class="cliente">Final clusters with 4 Zuñiga zones</p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container">
+              <img class="testimonio-imagen rounded" src="imagenes/PCA1.png" alt="Clusters for empty zones">
+              <p class="testimonio-texto">Principal Component Analysis Graph.</p>
+              <div class="testimonio-info">
+                <p class="cliente">Influence of parameters in cluster delimitation</p>
+                <p class="cargo">The graph shows that the clusters are governed by spatial distribution and key seismological features</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonios-carrusel2" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Last</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonios-carrusel2" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Experiencia -->
+<section id="application" class="experiencia seccion-clara">
+  <div class="container text-center">
+    <div class="row">
+      <!-- Desarrollo Web -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">PSHA CDMX</p>
+        <p>
+          As part of the results analysis of the seismogenic zones, it was applied a PSH for the site CU located in Mexico City
+          for this, it was obtained the distance and magnitude distributions for each zone regarding the site.    
+        </p>
+        <div class="badges-contenedor">
+          <div class="d-inline-block">
+            <a href="https://aplicaciones.iingen.unam.mx/ConsultasSPII/DetallePublicacion.aspx?id=152">
+              <button type="button" class="btn btn-secondary">
+                Check the code here!
+              </button>
+            </a>
+          </div>
+        </div>
+        <!-- Imagen agregada -->
+        <img src="imagenes/Distance_distribution_0.png" alt="Distance distribution for cluster zero" class="img-fluid mt-3">
+        <!-- Imagen agregada -->
+        <img src="imagenes/GR_distribution_0.png" alt="Gutenberg Richter distribution for cluster zero" class="img-fluid mt-3">
+      </div>
+
+      <!-- Articulos -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">Seismic hazard results</p>
+        <p>
+          This section shows the annual rate of excedence for the CU site, considering all zones, and Gracía's GMPE (2020).
+       
+        </p>
+    
+        <!-- Imagen agregada -->
+        <img src="imagenes/Annual_Rate.png" alt="Excedence rate versus PGA values for CU site" class="img-fluid mt-3">
+      </div>
+
+      <!-- Estudiante -->
+      <div class="columna col-12 col-md-4">
+        <i class="bi bi-clipboard-check"></i>
+        <p class="experiencia-titulo">UHS</p>
+        <p>
+          This section presents the Uniform hazard spectrum for the site compared with the reported by SASID.  
+        </p>
+        <!-- Imagen agregada -->
+        <img src="imagenes/UHS_final.png" alt="Uniform hazard spectrum" class="img-fluid mt-3">
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Contacto -->
+    <section id="contact" class="contacto seccion-clara">
+      <div class="container">
+        <div class="container text-center rectangulo d-flex justify-content-evenly">
+          <div class="row">
+            <div class="col-12 col-md-4 seccion-titulo-ending">
+              Check the full code!
+            </div>
+            <div class="col-12 col-md-4 descripcion">
+              All suggestions and comments are welcome.
+            </div>
+            <div class="col-12 col-md-4">
+              <a href="mailto:lilibetcontreras1@gmail.com">
+                <button type="button">  
+                  Contact
+                  <i class="bi bi-envelope-check-fill"></i>
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Pie de pagina (footer) -->
+    <footer class="seccion-oscura d-flex flex-column align-items-center justify-content-center"> 
+      <img class="footer-logo" src="imagenes/pctierra.png" alt="Logo del portafolio">
+      <p class="footer-texto text-center">Machine learning seismogenic zones.<br>International Workshop on Seismic Microzoning and Risk Reduction.</p>
+      <div class="iconos-redes-sociales d-flex flex-wrap align-items-center justify-content-center">
+        <a href="https://github.com/LiliContreras" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/lilibeth-contreras/" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-linkedin"></i>
+        </a>
+        <a href="https://www.instagram.com/tha.banshee/" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="mailto:lilibetcontreras1@gmail.com" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-envelope"></i>
+        </a>
+      </div>
+      <div class="derechos-de-autor">Created by Lilibeth Contreras (2025) &#169;</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+        <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+        <script src="main.js"></script>
+
+  </body>
+</html>
